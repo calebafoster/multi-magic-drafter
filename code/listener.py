@@ -41,4 +41,4 @@ class Listener:
         return pickle.loads(data)
 
     def serialize(self, data):
-        pass
+        return pickle.dumps(data)

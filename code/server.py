@@ -39,6 +39,7 @@ class Server:
     def deserialize(self, data):
         decoded_data = pickle.loads(data)
         self.unsorted_data = decoded_data
+        print(self.unsorted_data)
 
     def run_listener(self, conn):
         self.thread_count += 1

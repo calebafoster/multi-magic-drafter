@@ -87,3 +87,8 @@ class Game(State):
         self.connect_temp_hotkey()
         self.listen_for_data()
         self.init_pack_check()
+
+        if self.pack_ready:
+            self.pack_ready = False
+            data_to_send = self.listener.serialize(self.current_player_packet)
+            self.listener.socket.sendall(data_to_send)

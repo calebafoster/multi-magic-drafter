@@ -26,7 +26,6 @@ class Card(pygame.sprite.Sprite):
 
         threading.Thread(target=self.import_assets).start()
 
-
     def import_assets(self):
         while True:
             if self.dual_faced and self.image_path.is_file():
