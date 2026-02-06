@@ -1,13 +1,12 @@
 from update import get_json, write_json
-from pathlib import Path
+from settings import CARD_POOL_FOLDER, CARD_POOL_JSON
 
 class CardPool:
-    def __init__(self, name, source_path):
-        self.name = name
-        self.source_path = Path(source_path)
+    def __init__(self):
+        self.source_path = CARD_POOL_JSON
         self.card_list = get_json(self.source_path)
 
-        self.destination_path = self.source_path.parent / self.name
+        self.destination_path = CARD_POOL_FOLDER
         self.destination_path.mkdir(parents=True, exist_ok=True)
 
         self.check_files()

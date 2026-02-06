@@ -3,6 +3,7 @@ import requests
 import time
 import threading
 from pathlib import Path
+from settings import IMAGES, SECONDS
 
 class Card(pygame.sprite.Sprite):
     def __init__(self, card_dict, *groups):
@@ -14,13 +15,13 @@ class Card(pygame.sprite.Sprite):
 
         self.dual_faced = False
 
-        self.image_path = Path(f'images/{self.id}.png')
+        self.image_path = IMAGES / f'{self.id}.png'
         self.image = pygame.image.load('images/missing.png').convert_alpha()
         self.rect = self.image.get_rect()
 
         if 'card_faces' in self.dict:
             self.dual_faced = True
-            self.second_image_path = Path(f'images/seconds/{self.id}.png')
+            self.second_image_path = SECONDS / f'{self.id}.png'
             self.second_image = pygame.image.load('images/missing.png').convert_alpha()
 
         threading.Thread(target=self.import_assets).start()

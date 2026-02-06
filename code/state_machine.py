@@ -37,6 +37,9 @@ class State:
     def startup(self, persistant):
         self.persist = persistant
 
+    def add_persistant(self, key, value):
+        self.persist[key] = value
+
     def cleanup(self):
         self.done = False
         return self.persist
