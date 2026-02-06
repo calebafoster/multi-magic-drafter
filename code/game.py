@@ -10,7 +10,11 @@ class Game(State):
         State.__init__(self)
         self.player_id = 0
         self.pack_queue = []
-        self.pack_ready = False
+
+        self.packet_ready = False
+
+        self.construct_ready = True
+        self.assemble_ready = False
 
         self.can_space = True
 
@@ -68,13 +72,13 @@ class Game(State):
         if self.player_id and not self.current_player_packet and not self.pack_queue:
             self.current_pack = self.construct_pack(self.constructor)
             self.current_player_packet = self.construct_player_packet(self.current_pack)
-            self.pack_ready = True
+            self.packet_ready = True
 
         elif self.player_id and not self.current_player_packet:
             self.current_pack = self.assemble_pack_from_id(self.constructor, self.pack_queue[0])
             self.pack_queue.pop(0)
             self.current_player_packet = self.construct_player_packet(self.current_pack)
-            self.pack_ready = True
+            self.packet_ready = True
 
     def connect_temp_hotkey(self):
         keys = pygame.key.get_pressed()
@@ -83,12 +87,14 @@ class Game(State):
             self.can_space = False
             self.next = 'CONNECT'
 
+    def send_player_packet(self):
+        if self.packet_ready:
+            self.packet_ready = False
+            data_to_send = self.listener.serialize(self.current_player_packet)
+            self.listener.socket.sendall(data_to_send)
+
     def update(self, dt):
         self.connect_temp_hotkey()
         self.listen_for_data()
         self.init_pack_check()
-
-        if self.pack_ready:
-            self.pack_ready = False
-            data_to_send = self.listener.serialize(self.current_player_packet)
-            self.listener.socket.sendall(data_to_send)
+        self.send_player_packet()
