@@ -12,14 +12,15 @@ class Game(State):
         self.pack_queue = []
         self.pack_ready = False
 
-        self.cardpool = CardPool()
-        self.classic_constructor = Classic(self.cardpool)
+        self.can_space = True
+
         self.current_pack = pygame.sprite.Group()
         self.current_player_packet = {}
 
     def startup(self, persistant):
         self.persist = persistant
         self.listener = self.persist['listener']
+        self.constructor = self.persist['constructor']
 
     def cleanup(self):
         self.done = False
@@ -65,16 +66,24 @@ class Game(State):
 
     def init_pack_check(self):
         if self.player_id and not self.current_player_packet and not self.pack_queue:
-            self.current_pack = self.construct_pack(self.classic_constructor)
+            self.current_pack = self.construct_pack(self.constructor)
             self.current_player_packet = self.construct_player_packet(self.current_pack)
             self.pack_ready = True
 
         elif self.player_id and not self.current_player_packet:
-            self.current_pack = self.assemble_pack_from_id(self.classic_constructor, self.pack_queue[0])
+            self.current_pack = self.assemble_pack_from_id(self.constructor, self.pack_queue[0])
             self.pack_queue.pop(0)
             self.current_player_packet = self.construct_player_packet(self.current_pack)
             self.pack_ready = True
 
+    def connect_temp_hotkey(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE] and self.can_space:
+            self.done = True
+            self.can_space = False
+            self.next = 'CONNECT'
+
     def update(self, dt):
+        self.connect_temp_hotkey()
         self.listen_for_data()
         self.init_pack_check()

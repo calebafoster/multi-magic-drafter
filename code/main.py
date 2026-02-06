@@ -4,12 +4,16 @@ import sys
 from listener import Listener
 from state_machine import StateMachine
 import game
+import initialize
+import connect
 
 # idea for powerups: click on card to guarantee color identity match
 # as well as click to reroll or block cards for the next person to take
 
 STATE_DICT = {
+        "INIT": initialize.Init(),
         "GAME": game.Game(),
+        "CONNECT": connect.Connect(),
         }
 
 class Main:
@@ -19,29 +23,23 @@ class Main:
         pygame.display.set_caption("Ethan's Birthday Game 2")
         self.clock = pygame.time.Clock()
 
-        self.player_id = 0
-
-        self.listener = Listener()
-
         self.state_machine = StateMachine()
 
-        self.state_machine.setup_states(STATE_DICT, "GAME")
-        self.state_machine.state.startup({'listener': self.listener})
+        self.state_machine.setup_states(STATE_DICT, "INIT")
 
     def run(self):
-        threading.Thread(target=self.listener.run_listener).start()
         while True:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.listener.kill = True
+                    self.state_machine.state.listener.kill = True
                     pygame.quit()
                     sys.exit()
 
             dt = self.clock.tick(120) / 1000
 
-            self.state_machine.state.update(dt)
-            self.state_machine.state.draw(self.display_surface)
+            self.state_machine.update(dt)
+            self.state_machine.draw(self.display_surface)
 
             self.display_surface.fill('black')
 

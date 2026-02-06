@@ -17,7 +17,6 @@ class Classic:
         pack = [commander, land]
 
         keys_list = list(self.cardpool.nonlands.keys())
-        print(keys_list)
         random.shuffle(keys_list)
         for i in range(num - len(pack)):
             pack.append(self.cardpool.nonlands[keys_list[i]])

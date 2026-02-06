@@ -16,13 +16,13 @@ class Card(pygame.sprite.Sprite):
         self.dual_faced = False
 
         self.image_path = IMAGES / f'{self.id}.png'
-        self.image = pygame.image.load('images/missing.png').convert_alpha()
+        self.image = pygame.image.load('../images/missing.png').convert_alpha()
         self.rect = self.image.get_rect()
 
         if 'card_faces' in self.dict:
             self.dual_faced = True
             self.second_image_path = SECONDS / f'{self.id}.png'
-            self.second_image = pygame.image.load('images/missing.png').convert_alpha()
+            self.second_image = pygame.image.load('../images/missing.png').convert_alpha()
 
         threading.Thread(target=self.import_assets).start()
 
