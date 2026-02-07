@@ -1,7 +1,7 @@
 import pygame
 from state_machine import State
 from card import Card
-from settings import SURFACE_DIMENSIONS, CARD_DIMENSIONS, SURFACE_CENTER
+from settings import CARD_DIMENSIONS, SURFACE_CENTER
 
 # First the game needs to detect initial connection and create the first pack
 # Second the game needs to pick a card and send the pack off to the server with the card missing
