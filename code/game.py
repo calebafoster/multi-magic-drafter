@@ -1,5 +1,5 @@
 import pygame
-from state_machine import State
+from state_machine import State 
 from card import Card
 from settings import CARD_DIMENSIONS, SURFACE_CENTER
 
@@ -87,6 +87,7 @@ class Game(State):
     def new_pack_logic(self):
         if self.new_pack_bool:
             self.current_pack = self.construct_pack(self.constructor)
+            self.arrange_tape()
             self.new_pack_bool = False
 
         if not self.current_pack and self.player_id:
@@ -106,13 +107,16 @@ class Game(State):
 
         adjusted_tape_index = self.tape_index % len(self.current_pack)
         selected_card = self.current_pack.sprites()[adjusted_tape_index]
-        selected_card.rect.center = SURFACE_CENTER
 
         for index, card in enumerate(self.current_pack.sprites()):
             relative_index = index - adjusted_tape_index
 
-            card.rect.center = selected_card.rect.center
-            card.rect.x += relative_index * CARD_DIMENSIONS.x
+            card.set_scale_index(relative_index)
+            card.image_logic()
+
+            card.rect.center = SURFACE_CENTER
+            card.rect.x += relative_index * card.rect.width
+            print(card.scaled_index)
             self.tape_cards.add(card)
 
     def cycle_tape_input(self):
