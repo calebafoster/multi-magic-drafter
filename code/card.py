@@ -79,7 +79,11 @@ class Card(pygame.sprite.Sprite):
         self.scaled_rects = []
         for i in range(self.scaled_index + 1):
             print(i)
-            scalar = CARD_SCALE_PRIME / (i + 1)
+            scalar = 0.0
+            if i == 0:
+                scalar = CARD_SCALE_PRIME / (i + 1)
+            else:
+                scalar = CARD_SCALE_PRIME / (i + 0.5)
             images = []
             for surf in self.source_images:
                 scaled_image = pygame.transform.scale_by(surf, scalar)
